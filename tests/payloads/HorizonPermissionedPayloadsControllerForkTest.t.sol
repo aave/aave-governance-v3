@@ -76,6 +76,7 @@ contract HorizonPermissionedPayloadsControllerBaseTest is DeployUtils, Test {
   ContractsReport internal contracts;
   IPool internal pool;
 
+  // tenderly vtestnet addresses
   address public constant CONFIG_ENGINE =
     0xbbE84e8966005471b0BDC179Add6bd6CE85a60F2;
   address public constant ACL_MANAGER =
@@ -90,7 +91,6 @@ contract HorizonPermissionedPayloadsControllerBaseTest is DeployUtils, Test {
   address internal poolAddressesProvider;
   address internal proxyFactory;
   HorizonAssetListing internal horizonAssetListingPayload;
-
   TokenListingParams internal ASSET_LISTING_PARAMS;
 
   function setUp() public virtual {
@@ -346,12 +346,6 @@ contract HorizonPermissionedPayloadsControllerForkTest is
       .PAYLOADS_MANAGER();
     guardian = deploy_HorizonPermissionedPayloadsControllerTest.GUARDIAN();
 
-    // grant necessary roles to executor
-    // vm.startPrank(aclAdmin);
-    // IACLManager(ACL_MANAGER).addAssetListingAdmin(permissionedExecutor);
-    // IACLManager(ACL_MANAGER).addRiskAdmin(permissionedExecutor);
-    // vm.stopPrank();
-
     // PPC must own the permissioned executor to execute payloads
     vm.prank(HorizonAddresses.HORIZON_ADVANCED_MULTISIG);
     Ownable(permissionedExecutor).transferOwnership(
@@ -438,6 +432,15 @@ contract HorizonPermissionedPayloadsControllerForkTest is
 
   function testAdminRoles() external {
     address origin = makeAddr('origin');
+    assertTrue(
+      IACLManager(ACL_MANAGER).isAssetListingAdmin(permissionedExecutor),
+      'executor has asset listing admin'
+    );
+    assertTrue(
+      IACLManager(ACL_MANAGER).isRiskAdmin(permissionedExecutor),
+      'executor has risk admin'
+    );
+
     // create and queue payload
     _executePayload(origin);
 
