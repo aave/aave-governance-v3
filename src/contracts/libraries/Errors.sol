@@ -109,4 +109,7 @@ library Errors {
   string public constant ONLY_BY_PAYLOADS_MANAGER = '99'; // only payloads manager can call this function
   string public constant ONLY_BY_PAYLOADS_MANAGER_OR_GUARDIAN = '100'; // only payloads manager or guardian can call this function
   string public constant FUNCTION_NOT_SUPPORTED = '101'; // function not supported
+  string public constant NO_ASSETS_TO_LIST = '102';
+  string public constant ASSET_LISTING_FAILED = '103';
+  string public constant UNSUPPORTED_NETWORK_FOR_AAVE_V3 = '104';
 }
